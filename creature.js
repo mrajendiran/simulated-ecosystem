@@ -7,11 +7,14 @@ function Creature(x, y, hexColor, size, maxSpeed) {
   this.radius = 3.0;
   this.maxspeed = maxSpeed;    // Maximum speed
   this.maxforce = 0.05;  // Maximum steering force
+  //
+    this.size = size;
 
   this.run = function(creatures) {
     this.flock(creatures);  // accumulate new acceleration
     this.update();          // update location
     this.borders();
+    //this.eat(grass);
     this.render();
   },
 
@@ -156,5 +159,31 @@ function Creature(x, y, hexColor, size, maxSpeed) {
     if (this.position.y < this.radius) this.velocity.y = 1;
     if (this.position.x > width - this.radius) this.velocity.x = -1;
     if (this.position.y > height - this.radius) this.velocity.y = -1;
+    },
+  
+  
+  // A bloop can find food and eat it
+  this.eat = function(f) {
+    var food = f;
+    //var food = f.getFood();
+    // Are we touching any food objects?
+    for (var i = food.length-1; i >= 0; i--) {
+      var foodLocation = food[i];
+        //console.log(foodLocation.position);
+        //console.log(this.position);
+      var d = p5.Vector.dist(this.position, foodLocation.position);
+        //console.log(this.size);
+        //console.log(d);
+      
+      // If we are, juice up our strength!
+      if (d < this.size/2) {
+          //this.size += 10
+        //this.health += 100; 
+        console.log('ate something!')
+        food.splice(i,1);
+      }
     }
+  }
+
+
 }
