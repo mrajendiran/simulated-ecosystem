@@ -6,8 +6,8 @@ function setup() {
   createCanvas(700, 700);
 
   // Initialize creatures
-  for (var i = 0; i < 5; i++) {
-    creatures[i] = new Creature(random(width), random(height), "#eaeaea", 20, 1);
+  for (var i = 0; i < 15; i++) {
+    creatures[i] = new Creature(random(width), random(height), "#eaeaea", 20, 3);
   }
 
   for (var i = 0; i < 5; i++) {
