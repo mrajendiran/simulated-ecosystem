@@ -1,17 +1,33 @@
 // Creature class
 // Methods for Separation, Cohesion, Alignment added
-function Creature(worldList) {
-  this.rank = worldList.rank;
-  this.creatureSize = worldList.diameter/2;
-  this.visionRadius = worldList.visionRadius;
-  this.maxspeed = worldList.maxspeed;    // Maximum speed
+function Creature(dna_) {
+  this.dna = dna_;
+  this.maxspeed = map(this.dna.genes[0], 0, 1, 15, 0);
+  this.color = '';
+  switch(this.dna.genes[1]) {
+    case 0: // food (grass)
+            this.rank = 0;
+            this.creatureSize = 10;
+            this.maxspeed = 0;
+            this.color = 'green'
+            break;
+    case 1: // prey (rabbit)
+            this.rank = 1;
+            this.creatureSize = map(this.dna.genes[0], 0, 1, 10, 20);
+            this.color = 'magenta'
+            break;
+    case 2: // predator (wolf)
+            this.rank = 2;
+            this.creatureSize = map(this.dna.genes[0], 0, 1, 30, 40);
+            this.color = 'black'
+            break;
+  }
+
+  this.visionRadius = 6;
   this.acceleration = createVector(0, 0);
   this.velocity = p5.Vector.random2D();
   this.position = createVector(random(width),random(height));
   this.maxforce = 0.05;  // Maximum steering force
-  this.calories = worldList.startingDiet;
-  this.startDiet = worldList.startingDiet;
-  this.color = worldList.color;
 
   this.run = function(creatures) {
     this.flock(creatures);  // accumulate new acceleration
@@ -23,7 +39,11 @@ function Creature(worldList) {
   this.render = function() {
     fill(color(this.color));
     stroke(200);
-    ellipse(this.position.x, this.position.y, this.creatureSize, this.creatureSize);
+    if (this.rank == 0) {
+      rect(this.position.x, this.position.y, this.creatureSize, this.creatureSize)
+    } else {
+      ellipse(this.position.x, this.position.y, this.creatureSize, this.creatureSize);
+    }
   },
 
   // Forces go into acceleration
@@ -37,9 +57,9 @@ function Creature(worldList) {
     var ali = this.align(creatures);    // Alignment
     var coh = this.cohesion(creatures); // Cohesion
     // Arbitrarily weight these forces
-    sep.mult(2.5);
-    ali.mult(1.0);
-    coh.mult(1.0);
+    sep.mult(1.5);
+    ali.mult(0.5);
+    coh.mult(0.5);
     // Add the force vectors to acceleration
     this.applyForce(sep);
     this.applyForce(ali);
