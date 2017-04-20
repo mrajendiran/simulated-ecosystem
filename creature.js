@@ -1,19 +1,19 @@
 // Creature class
 // Methods for Separation, Cohesion, Alignment added
-function Creature(position, worldList) {
+function Creature(position, DNA) {
 
-  this.dna = worldList;
+  this.dna = DNA;
   this.position = position;
-  this.diameter = worldList.diameter;
-  this.creatureSize = worldList.diameter;
-  this.visionRadius = worldList.visionRadius;
-  this.maxspeed = worldList.maxspeed;    // Maximum speed
+  this.diameter = DNA.diameter;
+  this.creatureSize = DNA.diameter;
+  this.visionRadius = DNA.visionRadius;
+  this.maxspeed = DNA.maxspeed;    // Maximum speed
   this.acceleration = createVector(0, 0);
   this.velocity = p5.Vector.random2D();
   this.maxforce = 0.05;  // Maximum steering force
-  this.calories = worldList.startingDiet;
-  this.startDiet = worldList.startingDiet;
-  this.color = worldList.color;
+  this.calories = DNA.startingDiet;
+  this.startDiet = DNA.startingDiet;
+  this.color = DNA.color;
 
   this.run = function(creatures) {
     this.flock(creatures);  // accumulate new acceleration
