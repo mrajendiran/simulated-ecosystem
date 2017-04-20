@@ -17,7 +17,7 @@ grassStats = {
 	maxspeed: 0,
 	startingDiet: 5,
 	calorieBurnRate: calPerSec,
-  color: 'green'
+  color: '#00AA5B'
 }
 
 rabbitStats = {
@@ -27,7 +27,7 @@ rabbitStats = {
 	maxspeed: maxspeed,
 	startingDiet: 5,
 	calorieBurnRate: calPerSec,
-  color: 'gray',
+  color: '#55555B',
 	health: 100
 }
 
@@ -38,7 +38,7 @@ wolfStats = {
 	maxspeed: maxspeed,
 	startingDiet: 25,
 	calorieBurnRate: calPerSec,
-  color: 'black',
+  color: '#AA555B',
 	health: 200
 }
 

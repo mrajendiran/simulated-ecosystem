@@ -196,9 +196,17 @@ function Creature(position, DNA) {
       // Child is exact copy of single parent
       //var childDNA = this.dna.copy();
       var childDNA = this.dna;
+        
+        // col.substr(0,4) + String(Number(col[4]) + 1) + col[5]
+        col = childDNA.color
+        console.log(col);
+        console.log(col[5]);
+        childDNA.color = col.substr(0,5) + String(Number(col[5]) + 1)[0] + col[6]
+        //console.log(childDNA.color);
+        
       // Child DNA can mutate
       //childDNA.mutate(0.01);
-        console.log(childDNA.color);
+        
       
       newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
         
