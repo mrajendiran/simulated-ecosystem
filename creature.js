@@ -186,5 +186,19 @@ function Creature(position, worldList) {
         food.splice(i,1);
       }
     }
+  },
+
+  this.reproduce = function() {
+    // asexual reproduction
+    if (random(1) < 0.0005) {
+      // Child is exact copy of single parent
+      var childDNA = this.dna.copy();
+      // Child DNA can mutate
+      childDNA.mutate(0.01);
+      return new Creature(this.position, childDNA);
+    }
+    else {
+      return null;
+    }
   }
 }
