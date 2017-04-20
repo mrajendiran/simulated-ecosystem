@@ -1,7 +1,7 @@
 // Population stats
 var maxspeed = 3;
 var calPerSec = 1;
-var creatureSize = 80;
+var creatureSize = 40;
 var vision = 3;
 
 // Hold array for each creature species
@@ -83,7 +83,7 @@ function draw() {
   for (var i = 0; i < grass.length; i++) {
     grass[i].run(grass);
     if (random(1) < 0.0005) {
-      grass.push(new Creature(worldList[2]));
+      grass.push(new Creature(createVector(random(width),random(height)), worldList[2]));
     }
   }
     //console.log('year end')

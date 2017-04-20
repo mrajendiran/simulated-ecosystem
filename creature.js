@@ -4,7 +4,8 @@ function Creature(position, worldList) {
 
   this.dna = worldList;
   this.position = position;
-  this.creatureSize = worldList.diameter/2;
+  this.diameter = worldList.diameter;
+  this.creatureSize = worldList.diameter;
   this.visionRadius = worldList.visionRadius;
   this.maxspeed = worldList.maxspeed;    // Maximum speed
   this.acceleration = createVector(0, 0);
@@ -15,6 +16,7 @@ function Creature(position, worldList) {
   this.color = worldList.color;
 
   this.run = function(creatures) {
+    this.reproduce();
     this.flock(creatures);  // accumulate new acceleration
     this.update();          // update location
     this.borders();
@@ -180,7 +182,7 @@ function Creature(position, worldList) {
 
       // If we are, juice up our strength!
       if (d < this.creatureSize/2) {
-        this.Creaturesize += 10
+        this.creatureSize += 10;
         this.health += 100;
         console.log('ate something!')
         food.splice(i,1);
@@ -190,7 +192,7 @@ function Creature(position, worldList) {
 
   this.reproduce = function() {
     // asexual reproduction
-    if (random(1) < 0.0005) {
+    if (random(1) < 0.5) {
       // Child is exact copy of single parent
       var childDNA = this.dna.copy();
       // Child DNA can mutate
