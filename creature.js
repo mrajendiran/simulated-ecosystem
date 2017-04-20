@@ -16,7 +16,6 @@ function Creature(position, worldList) {
   this.color = worldList.color;
 
   this.run = function(creatures) {
-    this.reproduce();
     this.flock(creatures);  // accumulate new acceleration
     this.update();          // update location
     this.borders();
@@ -192,12 +191,18 @@ function Creature(position, worldList) {
 
   this.reproduce = function() {
     // asexual reproduction
-    if (random(1) < 0.5) {
+    if (random(1) < 0.0005) {
+        console.log('reproduce!')
       // Child is exact copy of single parent
-      var childDNA = this.dna.copy();
+      //var childDNA = this.dna.copy();
+      var childDNA = this.dna;
       // Child DNA can mutate
-      childDNA.mutate(0.01);
-      return new Creature(this.position, childDNA);
+      //childDNA.mutate(0.01);
+        console.log(childDNA.color);
+      
+      newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
+        
+      return new Creature(newPosition, childDNA);
     }
     else {
       return null;

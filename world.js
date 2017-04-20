@@ -73,6 +73,10 @@ function draw() {
   for (var i = 0; i < rabbits.length; i++) {
     rabbits[i].run(rabbits);
     rabbits[i].eat(grass);
+    potentialChild = rabbits[i].reproduce();
+    if (potentialChild != null){
+        rabbits.push(potentialChild);
+    }
   }
 
   for (var i = 0; i < wolves.length; i++) {
