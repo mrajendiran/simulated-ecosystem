@@ -1,13 +1,14 @@
 // Creature class
 // Methods for Separation, Cohesion, Alignment added
-function Creature(worldList) {
-  this.rank = worldList.rank;
+function Creature(position, worldList) {
+
+  this.dna = worldList;
+  this.position = position;
   this.creatureSize = worldList.diameter/2;
   this.visionRadius = worldList.visionRadius;
   this.maxspeed = worldList.maxspeed;    // Maximum speed
   this.acceleration = createVector(0, 0);
   this.velocity = p5.Vector.random2D();
-  this.position = createVector(random(width),random(height));
   this.maxforce = 0.05;  // Maximum steering force
   this.calories = worldList.startingDiet;
   this.startDiet = worldList.startingDiet;
@@ -179,8 +180,8 @@ function Creature(worldList) {
 
       // If we are, juice up our strength!
       if (d < this.creatureSize/2) {
-          //this.size += 10
-        //this.health += 100;
+        this.Creaturesize += 10
+        this.health += 100;
         console.log('ate something!')
         food.splice(i,1);
       }
