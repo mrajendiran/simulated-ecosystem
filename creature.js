@@ -1,29 +1,27 @@
 // Creature class
 // Methods for Separation, Cohesion, Alignment added
-function Creature(worldList) {
-  this.rank = worldList.rank;
-  this.creatureSize = worldList.diameter/2;
-  this.visionRadius = worldList.visionRadius;
-  this.maxspeed = worldList.maxspeed;    // Maximum speed
+function Creature(x, y, hexColor, size, maxSpeed) {
   this.acceleration = createVector(0, 0);
   this.velocity = p5.Vector.random2D();
-  this.position = createVector(random(width),random(height));
+  this.position = createVector(x, y);
+  this.radius = 3.0;
+  this.maxspeed = maxSpeed;    // Maximum speed
   this.maxforce = 0.05;  // Maximum steering force
-  this.calories = worldList.startingDiet;
-  this.startDiet = worldList.startingDiet;
-  this.color = worldList.color;
+  //
+    this.size = size;
 
   this.run = function(creatures) {
     this.flock(creatures);  // accumulate new acceleration
     this.update();          // update location
     this.borders();
+    //this.eat(grass);
     this.render();
   },
 
   this.render = function() {
-    fill(color(this.color));
+    fill(color(hexColor));
     stroke(200);
-    ellipse(this.position.x, this.position.y, this.creatureSize, this.creatureSize);
+    ellipse(this.position.x, this.position.y, size, size);
   },
 
   // Forces go into acceleration
@@ -157,10 +155,10 @@ function Creature(worldList) {
 
     // Prevent from leaving canvas
   this.borders = function() {
-    if (this.position.x < this.visionRadius) this.velocity.x = 1;
-    if (this.position.y < this.visionRadius) this.velocity.y = 1;
-    if (this.position.x > windowWidth - this.visionRadius) this.velocity.x = -1;
-    if (this.position.y > windowHeight - this.visionRadius) this.velocity.y = -1;
+    if (this.position.x < this.radius) this.velocity.x = 1;
+    if (this.position.y < this.radius) this.velocity.y = 1;
+    if (this.position.x > width - this.radius) this.velocity.x = -1;
+    if (this.position.y > height - this.radius) this.velocity.y = -1;
     },
 
 
@@ -174,11 +172,11 @@ function Creature(worldList) {
         //console.log(foodLocation.position);
         //console.log(this.position);
       var d = p5.Vector.dist(this.position, foodLocation.position);
-        //console.log(this.creatureSize);
+        //console.log(this.size);
         //console.log(d);
 
       // If we are, juice up our strength!
-      if (d < this.creatureSize/2) {
+      if (d < this.size/2) {
           //this.size += 10
         //this.health += 100;
         console.log('ate something!')
@@ -186,4 +184,6 @@ function Creature(worldList) {
       }
     }
   }
+
+
 }
