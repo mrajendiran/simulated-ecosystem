@@ -1,15 +1,15 @@
 toDo
 
+Monica:
+- sexual reproduce
+
+- mutate
+
+Seth:
+- make color change for generations
+
 - steer away from predators
 
 - steer towards prey
     - should somehow involve vision radius
-
-sexual reproduce
-
-mutate
-
-address worldList
-
-make color change for generations
 
