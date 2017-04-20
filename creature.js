@@ -1,33 +1,25 @@
 // Creature class
 // Methods for Separation, Cohesion, Alignment added
-function Creature(dna_) {
-  this.dna = dna_;
-  this.maxspeed = map(this.dna.genes[0], 0, 1, 15, 0);
-  this.color = '';
-  switch(this.dna.genes[1]) {
-    case 0: // food (grass)
-            this.rank = 0;
-            this.creatureSize = 10;
-            this.maxspeed = 0;
-            this.color = 'green'
-            break;
-    case 1: // prey (rabbit)
-            this.rank = 1;
-            this.creatureSize = map(this.dna.genes[0], 0, 1, 10, 20);
-            this.color = 'magenta'
-            break;
-    case 2: // predator (wolf)
-            this.rank = 2;
-            this.creatureSize = map(this.dna.genes[0], 0, 1, 30, 40);
-            this.color = 'black'
-            break;
-  }
+function Creature(position, worldList) {
 
-  this.visionRadius = 6;
+  this.dna = worldList;
+  this.position = position;
+
+  //this.dna = dna_;
+  //this.maxspeed = map(this.dna.genes[0], 0, 1, 15, 0);
+  //this.visionRadius = map(this.dna.genes[0], 0, 1, 0, 50);
+
+  this.creatureSize = worldList.diameter/2;
+  this.visionRadius = worldList.visionRadius;
+  this.maxspeed = worldList.maxspeed;
+     // Maximum speed
   this.acceleration = createVector(0, 0);
   this.velocity = p5.Vector.random2D();
-  this.position = createVector(random(width),random(height));
   this.maxforce = 0.05;  // Maximum steering force
+  this.calories = worldList.startingDiet;
+  this.startDiet = worldList.startingDiet;
+  this.color = worldList.color;
+  this.health = worldList.health;
 
   this.run = function(creatures) {
     this.flock(creatures);  // accumulate new acceleration
@@ -37,13 +29,9 @@ function Creature(dna_) {
   },
 
   this.render = function() {
-    fill(color(this.color));
+    fill(color(this.color), this.health);
     stroke(200);
-    if (this.rank == 0) {
-      rect(this.position.x, this.position.y, this.creatureSize, this.creatureSize)
-    } else {
-      ellipse(this.position.x, this.position.y, this.creatureSize, this.creatureSize);
-    }
+    ellipse(this.position.x, this.position.y, this.creatureSize, this.creatureSize);
   },
 
   // Forces go into acceleration
@@ -57,9 +45,9 @@ function Creature(dna_) {
     var ali = this.align(creatures);    // Alignment
     var coh = this.cohesion(creatures); // Cohesion
     // Arbitrarily weight these forces
-    sep.mult(1.5);
-    ali.mult(0.5);
-    coh.mult(0.5);
+    sep.mult(2.5);
+    ali.mult(1.0);
+    coh.mult(1.0);
     // Add the force vectors to acceleration
     this.applyForce(sep);
     this.applyForce(ali);
@@ -75,6 +63,7 @@ function Creature(dna_) {
     this.position.add(this.velocity);
     // Reset acceleration to 0 each cycle
     this.acceleration.mult(0);
+    this.health = this.health - 1;
   },
 
   // A method that calculates and applies a steering force towards a target
@@ -199,11 +188,29 @@ function Creature(dna_) {
 
       // If we are, juice up our strength!
       if (d < this.creatureSize/2) {
-          //this.size += 10
-        //this.health += 100;
+        this.creatureSize += 10
+        this.health += 100;
         console.log('ate something!')
         food.splice(i,1);
       }
     }
+  },
+
+
+  this.reproduce = function() {
+    console.log('trying to reproduce');
+  // asexual reproduction
+  if (random(1) < 0.5) {
+    // Child is exact copy of single parent
+    var childDNA = this.dna.copy();
+    // Child DNA can mutate
+    childDNA.mutate(0.01);
+    return new Creature(this.position, childDNA);
   }
+  else {
+    return null;
+  }
+}
+
+
 }
