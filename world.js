@@ -2,7 +2,9 @@
 var maxspeed = 3;
 var calPerSec = 1;
 var creatureSize = 40;
+var reproThresh = 0.0001;
 var vision = 3;
+var appetite = 10;
 
 // Hold array for each creature species
 var rabbits = [];
@@ -13,6 +15,9 @@ var grass = [];
 grassStats = {
 	rank: 1,
 	diameter: creatureSize*0.4,
+    reproThresh: reproThresh * 1.5,
+    hunger: 0, // maybe grass doesn't need hunger and appetite...
+    appetite: appetite*0.4,
 	visionRadius: vision,
 	maxspeed: 0,
 	startingDiet: 5,
@@ -23,6 +28,9 @@ grassStats = {
 rabbitStats = {
 	rank: 1,
 	diameter: creatureSize*0.6,
+    reproThresh: reproThresh,
+    hunger: 0,
+    appetite: appetite*0.6,
 	visionRadius: vision,
 	maxspeed: maxspeed,
 	startingDiet: 5,
@@ -34,6 +42,9 @@ rabbitStats = {
 wolfStats = {
 	rank: 2,
 	diameter: creatureSize,
+    reproThresh: reproThresh * 0.4,
+    hunger: 0,
+    appetite: appetite,
 	visionRadius: vision,
 	maxspeed: maxspeed,
 	startingDiet: 25,
@@ -82,13 +93,23 @@ function draw() {
   for (var i = 0; i < wolves.length; i++) {
     wolves[i].run(wolves);
     wolves[i].eat(rabbits);
+    potentialChild = wolves[i].reproduce();
+    if (potentialChild != null){
+        wolves.push(potentialChild);
+    }
   }
 
   for (var i = 0; i < grass.length; i++) {
     grass[i].run(grass);
+    potentialChild = grass[i].reproduce();
+    if (potentialChild != null){
+        grass.push(potentialChild);
+    }
+     
     if (random(1) < 0.0005) {
       grass.push(new Creature(createVector(random(width),random(height)), worldList[2]));
     }
+    
   }
     //console.log('year end')
 }

@@ -5,7 +5,10 @@ function Creature(position, DNA) {
   this.dna = DNA;
   this.position = position;
   this.diameter = DNA.diameter;
+  this.reproThresh = DNA.reproThresh;
   this.creatureSize = DNA.diameter;
+  this.hunger = DNA.hunger;
+  this.appetite = DNA.appetite;
   this.visionRadius = DNA.visionRadius;
   this.maxspeed = DNA.maxspeed;    // Maximum speed
   this.acceleration = createVector(0, 0);
@@ -20,6 +23,9 @@ function Creature(position, DNA) {
     this.update();          // update location
     this.borders();
     this.render();
+    //
+    this.hunger += 1;
+    // this.creatureSize -= 0.01; // need to make them die when they have less than 1. Also maybe grass shouldn't fatigue?
   },
 
   this.render = function() {
@@ -173,16 +179,14 @@ function Creature(position, DNA) {
     // Are we touching any food objects?
     for (var i = food.length-1; i >= 0; i--) {
       var foodLocation = food[i];
-        //console.log(foodLocation.position);
-        //console.log(this.position);
       var d = p5.Vector.dist(this.position, foodLocation.position);
-        //console.log(this.creatureSize);
-        //console.log(d);
 
-      // If we are, juice up our strength!
-      if (d < this.creatureSize/2) {
+      // If we are, EAT IT!
+      //if (d < this.creatureSize/2) {
+      if (d < this.creatureSize/2 & this.hunger > this.appetite) {
         this.creatureSize += 10;
         this.health += 100;
+        this.hunger = 0;
         console.log('ate something!')
         food.splice(i,1);
       }
@@ -191,23 +195,23 @@ function Creature(position, DNA) {
 
   this.reproduce = function() {
     // asexual reproduction
-    if (random(1) < 0.0005) {
-        console.log('reproduce!')
+    if (random(1) < this.reproThresh * this.diameter) {
+      console.log('reproduce!')
+      
       // Child is exact copy of single parent
       //var childDNA = this.dna.copy();
       var childDNA = this.dna;
         
-        // col.substr(0,4) + String(Number(col[4]) + 1) + col[5]
-        col = childDNA.color
-        console.log(col);
-        console.log(col[5]);
-        childDNA.color = col.substr(0,5) + String(Number(col[5]) + 1)[0] + col[6]
-        //console.log(childDNA.color);
+      // change color of child
+      col = this.color;
+      childDNA.color = col.substr(0,5) + String(Number(col[5]) + 1)[0] + col[6]
         
       // Child DNA can mutate
       //childDNA.mutate(0.01);
         
-      
+      // parent loses energy (goes to 80% starting size or half current size, whichever is bigger)
+      this.creatureSize = Math.max(this.diameter * .8, this.creatureSize / 2);
+      //
       newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
         
       return new Creature(newPosition, childDNA);
