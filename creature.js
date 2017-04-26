@@ -25,7 +25,8 @@ function Creature(position, DNA) {
     this.render();
     //
     this.hunger += 1;
-    // this.creatureSize -= 0.01; // need to make them die when they have less than 1. Also maybe grass shouldn't fatigue?
+    //this.creatureSize -= 0.01; // need to make them die when they have less than 1. Also maybe grass shouldn't fatigue?
+      this.creatureSize -= this.creatureSize * 0.001;
   },
 
   this.render = function() {

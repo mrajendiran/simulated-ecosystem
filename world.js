@@ -77,6 +77,27 @@ function setup() {
   }
 }
 
+function createRabbit(event) {
+  //log location
+    downX = event.pageX;
+    downY = event.pageY;
+    //rabbits.push(new Creature(createVector(downX,downY), worldList[1])); //just rabbits
+    //
+    // randomly generate
+    newPick = int(random(3)); // pick a 0, 1, or 2
+    console.log(newPick);
+    //
+    if (newPick==0) {
+        wolves.push(new Creature(createVector(downX,downY), worldList[newPick]));
+    } else if (newPick==1) {
+        rabbits.push(new Creature(createVector(downX,downY), worldList[newPick]));
+    } else if (newPick==2) {
+        grass.push(new Creature(createVector(downX,downY), worldList[newPick]));
+    }
+    
+}  
+document.addEventListener("mousedown", createRabbit);
+
 // Draw creature species (run creature functions)
 function draw() {
   background('#dee8df');
