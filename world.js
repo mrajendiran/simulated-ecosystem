@@ -15,7 +15,7 @@ var grass = [];
 grassStats = {
 	rank: 1,
 	diameter: creatureSize*0.4,
-    reproThresh: reproThresh * 1.5,
+    reproThresh: reproThresh * 3,
     hunger: 0, // maybe grass doesn't need hunger and appetite...
     appetite: appetite*0.4,
 	visionRadius: vision,
@@ -42,7 +42,7 @@ rabbitStats = {
 wolfStats = {
 	rank: 2,
 	diameter: creatureSize,
-    reproThresh: reproThresh * 0.4,
+    reproThresh: reproThresh * 0.3,
     hunger: 0,
     appetite: appetite,
 	visionRadius: vision,
@@ -103,8 +103,11 @@ function draw() {
   background('#dee8df');
   // Start population
   for (var i = 0; i < rabbits.length; i++) {
+    // move
     rabbits[i].run(rabbits);
+    // eat
     rabbits[i].eat(grass);
+    // reproduce
     potentialChild = rabbits[i].reproduce();
     if (potentialChild != null){
         rabbits.push(potentialChild);

@@ -19,7 +19,8 @@ function Creature(position, DNA) {
   this.color = DNA.color;
 
   this.run = function(creatures) {
-    this.flock(creatures);  // accumulate new acceleration
+    //this.flock(creatures);  // accumulate new acceleration
+    this.flee(creatures);  // accumulate new acceleration
     this.update();          // update location
     this.borders();
     this.render();
@@ -42,6 +43,21 @@ function Creature(position, DNA) {
 
   // We accumulate a new acceleration each time based on three rules
   this.flock = function(creatures) {
+    var sep = this.separate(creatures); // Separation
+    var ali = this.align(creatures);    // Alignment
+    var coh = this.cohesion(creatures); // Cohesion
+    // Arbitrarily weight these forces
+    sep.mult(2.5);
+    ali.mult(1.0);
+    coh.mult(1.0);
+    // Add the force vectors to acceleration
+    this.applyForce(sep);
+    this.applyForce(ali);
+    this.applyForce(coh);
+  },
+      
+  // We accumulate a new acceleration each time based on three rules
+  this.flee = function(creatures) {
     var sep = this.separate(creatures); // Separation
     var ali = this.align(creatures);    // Alignment
     var coh = this.cohesion(creatures); // Cohesion
@@ -196,7 +212,7 @@ function Creature(position, DNA) {
 
   this.reproduce = function() {
     // asexual reproduction
-    if (random(1) < this.reproThresh * this.diameter) {
+    if (random(1) / (0.5 * this.creatureSize) < this.reproThresh ) { // bigger ones should reproduce easier
       console.log('reproduce!')
       
       // Child is exact copy of single parent
