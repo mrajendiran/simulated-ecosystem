@@ -19,15 +19,18 @@ function Creature(position, DNA) {
   this.color = DNA.color;
 
   this.run = function(creatures) {
-    //this.flock(creatures);  // accumulate new acceleration
-    this.flee(creatures);  // accumulate new acceleration
+    this.flock(creatures);  // accumulate new acceleration
     this.update();          // update location
     this.borders();
     this.render();
     //
     this.hunger += 1;
-    //this.creatureSize -= 0.01; // need to make them die when they have less than 1. Also maybe grass shouldn't fatigue?
-      this.creatureSize -= this.creatureSize * 0.001;
+    // fatigue
+    //this.creatureSize -= this.creatureSize * 0.001; // multiplicative (i.e. they never get to 0)
+    //
+    this.creatureSize -= 0.003 * this.appetite; // need to make them die when they have less than 1. Also maybe grass shouldn't fatigue?
+
+    
   },
 
   this.render = function() {
@@ -42,14 +45,14 @@ function Creature(position, DNA) {
   },
 
   // We accumulate a new acceleration each time based on three rules
-  this.flock = function(creatures) {
+  this.flock = function(creatures, cohMult=1.0) {
     var sep = this.separate(creatures); // Separation
     var ali = this.align(creatures);    // Alignment
     var coh = this.cohesion(creatures); // Cohesion
     // Arbitrarily weight these forces
     sep.mult(2.5);
     ali.mult(1.0);
-    coh.mult(1.0);
+    coh.mult(cohMult);
     // Add the force vectors to acceleration
     this.applyForce(sep);
     this.applyForce(ali);
@@ -57,18 +60,18 @@ function Creature(position, DNA) {
   },
       
   // We accumulate a new acceleration each time based on three rules
-  this.flee = function(creatures) {
-    var sep = this.separate(creatures); // Separation
-    var ali = this.align(creatures);    // Alignment
-    var coh = this.cohesion(creatures); // Cohesion
+  this.flee = function(creatures, sepDistance=100, sepMult=25) {
+    var sep = this.separate(creatures, sepDistance); // Separation
+    //var ali = this.align(creatures);    // Alignment
+    //var coh = this.cohesion(creatures); // Cohesion
     // Arbitrarily weight these forces
-    sep.mult(2.5);
-    ali.mult(1.0);
-    coh.mult(1.0);
+    sep.mult(sepMult);
+    //ali.mult(1.0);
+    //coh.mult(1.0);
     // Add the force vectors to acceleration
     this.applyForce(sep);
-    this.applyForce(ali);
-    this.applyForce(coh);
+    //this.applyForce(ali);
+    //this.applyForce(coh);
   },
 
   // Method to update location
@@ -98,8 +101,8 @@ function Creature(position, DNA) {
 
   // Separation
   // Method checks for nearby creatures and steers away
-  this.separate = function(creatures) {
-    var desiredseparation = 25.0;
+  this.separate = function(creatures, sepDistance=25.0) {
+    var desiredseparation = sepDistance;
     var steer = createVector(0, 0);
     var count = 0;
     // For every creature in the system, check if it's too close
@@ -212,7 +215,7 @@ function Creature(position, DNA) {
 
   this.reproduce = function() {
     // asexual reproduction
-    if (random(1) / (0.5 * this.creatureSize) < this.reproThresh ) { // bigger ones should reproduce easier
+    if (random(1) / (0.025 * this.creatureSize**2) < this.reproThresh ) { // bigger ones should reproduce easier
       console.log('reproduce!')
       
       // Child is exact copy of single parent
@@ -229,6 +232,7 @@ function Creature(position, DNA) {
       // parent loses energy (goes to 80% starting size or half current size, whichever is bigger)
       this.creatureSize = Math.max(this.diameter * .8, this.creatureSize / 2);
       //
+        
       newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
         
       return new Creature(newPosition, childDNA);

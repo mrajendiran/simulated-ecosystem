@@ -15,7 +15,7 @@ var grass = [];
 grassStats = {
 	rank: 1,
 	diameter: creatureSize*0.4,
-    reproThresh: reproThresh * 3,
+    reproThresh: reproThresh * 2,
     hunger: 0, // maybe grass doesn't need hunger and appetite...
     appetite: appetite*0.4,
 	visionRadius: vision,
@@ -107,24 +107,36 @@ function draw() {
     rabbits[i].run(rabbits);
     // eat
     rabbits[i].eat(grass);
+    //rabbits[i].flock(grass, 3.0); // CHASE THE GRASS!
+    // run away from wolves
+    rabbits[i].flee(wolves, 50, 2.5);  // RUN AWAY!
     // reproduce
     potentialChild = rabbits[i].reproduce();
     if (potentialChild != null){
         rabbits.push(potentialChild);
+    }
+    // kill
+    if (rabbits[i].creatureSize < 0) {
+        rabbits.splice(i,1)
     }
   }
 
   for (var i = 0; i < wolves.length; i++) {
     wolves[i].run(wolves);
     wolves[i].eat(rabbits);
+    wolves[i].flock(rabbits, 2.0); // CHASE THE RABBITS!
     potentialChild = wolves[i].reproduce();
     if (potentialChild != null){
         wolves.push(potentialChild);
     }
+    // kill
+    if (wolves[i].creatureSize < 0) {
+        wolves.splice(i,1)
+    }
   }
 
   for (var i = 0; i < grass.length; i++) {
-    grass[i].run(grass);
+    grass[i].render(grass);
     potentialChild = grass[i].reproduce();
     if (potentialChild != null){
         grass.push(potentialChild);
