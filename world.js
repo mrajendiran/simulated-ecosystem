@@ -15,7 +15,7 @@ var grass = [];
 grassStats = {
 	rank: 1,
 	diameter: creatureSize*0.4,
-  reproThresh: reproThresh * 2,
+  reproThresh: reproThresh * 0.5,
   hunger: 0, // maybe grass doesn't need hunger and appetite...
   appetite: appetite*0.4,
 	visionRadius: vision,
@@ -27,7 +27,7 @@ grassStats = {
 }
 
 rabbitStats = {
-	rank: 1,
+	rank: 2,
 	diameter: creatureSize*0.6,
   reproThresh: reproThresh,
   hunger: 0,
@@ -41,7 +41,7 @@ rabbitStats = {
 }
 
 wolfStats = {
-	rank: 2,
+	rank: 3,
 	diameter: creatureSize,
   reproThresh: reproThresh * 0.3,
   hunger: 0,
@@ -158,5 +158,10 @@ function draw() {
         grass.push(potentialChild);
     }
   }
-    //console.log('year end')
+
+
+	//display to HTML page
+	document.getElementById("wolfPop").innerHTML = wolves.length;
+	document.getElementById("rabbitPop").innerHTML = rabbits.length;
+	document.getElementById("grassPop").innerHTML = grass.length;
 }
