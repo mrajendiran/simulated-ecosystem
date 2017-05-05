@@ -253,7 +253,7 @@ function Creature(position, DNA) {
       // parent loses energy (goes to 80% starting size or half current size, whichever is bigger)
       this.creatureSize = Math.max(this.diameter * .8, this.creatureSize / 2);
       // place this child tenderly into the new world
-      var newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
+      var newPosition = createVector(this.position.x + (this.creatureSize*random(-1,5)), this.position.y + (this.creatureSize*random(-1,5)))
       return new Creature(newPosition, childDNA);
     }
     else {
