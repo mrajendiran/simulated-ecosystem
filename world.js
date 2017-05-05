@@ -43,7 +43,7 @@ rabbitStats = {
 wolfStats = {
 	rank: 3,
 	diameter: creatureSize,
-  reproThresh: reproThresh * 0.3,
+  reproThresh: reproThresh * 0.2,
   hunger: 0,
   appetite: appetite,
 	visionRadius: vision,
@@ -69,6 +69,33 @@ wolfStats['calorieBurnRate'], wolfStats['color'], wolfStats['health']]
 //Array of all species
 var worldDNA = [wolfDNA, rabbitDNA, grassDNA];
 
+function createCreature(event) {
+  //log location
+    downX = event.pageX;
+    downY = event.pageY;
+    //rabbits.push(new Creature(createVector(downX,downY), worldDNA[1])); //just rabbits
+    //
+    // randomly generate
+    newPick = int(random(3)); // pick a 0, 1, or 2
+    console.log(newPick);
+    //
+    if (newPick==0) {
+        wolves.push(new Creature(createVector(downX,downY), worldDNA[newPick]));
+    } else if (newPick==1) {
+        rabbits.push(new Creature(createVector(downX,downY), worldDNA[newPick]));
+    } else if (newPick==2) {
+        grass.push(new Creature(createVector(downX,downY), worldDNA[newPick]));
+    }
+
+}
+document.addEventListener("mousedown", createCreature);
+
+function newWorld() {
+	if (rabbits.length == 0 || wolves.length == 0) {
+		location.reload();
+	}
+}
+
 // Setup and initialize ecosystem
 function setup() {
   createCanvas(900, 900);
@@ -89,27 +116,6 @@ function setup() {
     grass[i] = new Creature(position3, worldDNA[2]);
   }
 }
-
-function createRabbit(event) {
-  //log location
-    downX = event.pageX;
-    downY = event.pageY;
-    //rabbits.push(new Creature(createVector(downX,downY), worldDNA[1])); //just rabbits
-    //
-    // randomly generate
-    newPick = int(random(3)); // pick a 0, 1, or 2
-    console.log(newPick);
-    //
-    if (newPick==0) {
-        wolves.push(new Creature(createVector(downX,downY), worldDNA[newPick]));
-    } else if (newPick==1) {
-        rabbits.push(new Creature(createVector(downX,downY), worldDNA[newPick]));
-    } else if (newPick==2) {
-        grass.push(new Creature(createVector(downX,downY), worldDNA[newPick]));
-    }
-
-}
-document.addEventListener("mousedown", createRabbit);
 
 // Draw creature species (run creature functions)
 function draw() {
@@ -159,7 +165,7 @@ function draw() {
     }
   }
 
-
+	newWorld();
 	//display to HTML page
 	document.getElementById("wolfPop").innerHTML = wolves.length;
 	document.getElementById("rabbitPop").innerHTML = rabbits.length;
