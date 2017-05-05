@@ -1,22 +1,25 @@
 // Creature class
 // Methods for Separation, Cohesion, Alignment added
+//grassDNA = [grassStats['rank'], grassStats['diameter'], grassStats['reproThresh'], grassStats['hunger'],
+//grassStats['appetite'], grassStats['visionRadius'], grassStats['maxspeed'], grassStats['startingDiet'],
+//grassStats['calorieBurnRate'], grassStats['color']]
 function Creature(position, DNA) {
 
   this.dna = DNA;
   this.position = position;
-  this.diameter = DNA.diameter;
-  this.reproThresh = DNA.reproThresh;
-  this.creatureSize = DNA.diameter;
-  this.hunger = DNA.hunger;
-  this.appetite = DNA.appetite;
-  this.visionRadius = DNA.visionRadius;
-  this.maxspeed = DNA.maxspeed;    // Maximum speed
+  this.diameter = DNA[1];
+  this.creatureSize = DNA[1];
+  this.reproThresh = DNA[2];
+  this.hunger = DNA[3];
+  this.appetite = DNA[4];
+  this.visionRadius = DNA[5];
+  this.maxspeed = DNA[6];    // Maximum speed
+  this.calories = DNA[7];
+  this.startDiet = DNA[7];
+  this.color = DNA[9];
   this.acceleration = createVector(0, 0);
   this.velocity = p5.Vector.random2D();
   this.maxforce = 0.05;  // Maximum steering force
-  this.calories = DNA.startingDiet;
-  this.startDiet = DNA.startingDiet;
-  this.color = DNA.color;
 
   this.run = function(creatures) {
     this.flock(creatures);  // accumulate new acceleration
@@ -30,7 +33,7 @@ function Creature(position, DNA) {
     //
     this.creatureSize -= 0.003 * this.appetite; // need to make them die when they have less than 1. Also maybe grass shouldn't fatigue?
 
-    
+
   },
 
   this.render = function() {
@@ -58,7 +61,7 @@ function Creature(position, DNA) {
     this.applyForce(ali);
     this.applyForce(coh);
   },
-      
+
   // We accumulate a new acceleration each time based on three rules
   this.flee = function(creatures, sepDistance=100, sepMult=25) {
     var sep = this.separate(creatures, sepDistance); // Separation
@@ -213,28 +216,42 @@ function Creature(position, DNA) {
     }
   },
 
-  this.reproduce = function() {
-    // asexual reproduction
+  this.reproduce = function(bPartner) {
+
     if (random(1) / (0.025 * this.creatureSize**2) < this.reproThresh ) { // bigger ones should reproduce easier
-      console.log('reproduce!')
-      
-      // Child is exact copy of single parent
-      //var childDNA = this.dna.copy();
-      var childDNA = this.dna;
-        
-      // change color of child
-      col = this.color;
-      childDNA.color = col.substr(0,5) + String(Number(col[5]) + 1)[0] + col[6]
-        
-      // Child DNA can mutate
-      //childDNA.mutate(0.01);
-        
+
+      // Crossover
+      var aPartnerDNA = this.dna;
+      var bPartnerDNA = bPartner.dna;
+      var childDNA = []
+
+      // where in the gene length to share genes
+      var position = round(random(1,11))
+      for (var i = 0; i < this.dna.length; i++) {
+        if (i > position) {
+          childDNA[i] = aPartnerDNA[i];
+        }
+        else {
+          childDNA[i] = bPartnerDNA[i];
+        }
+      }
+      //console.log(childDNA)
+
+      // Mutation
+      var mutationRate = 0.2
+      var mutateFactor = round(random(-5,5));
+      if (random(1) < mutationRate) {
+        childDNA[1] += mutateFactor;
+        childDNA[6] += mutateFactor;
+        childDNA[10] += mutateFactor;
+      }
+      console.log(mutateFactor)
+
+
       // parent loses energy (goes to 80% starting size or half current size, whichever is bigger)
       this.creatureSize = Math.max(this.diameter * .8, this.creatureSize / 2);
-      //
-        
-      newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
-        
+      // place this child tenderly into the new world
+      var newPosition = createVector(this.position.x + this.creatureSize, this.position.y + this.creatureSize)
       return new Creature(newPosition, childDNA);
     }
     else {
