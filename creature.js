@@ -239,10 +239,12 @@ function Creature(position, DNA) {
 
       // Mutation
       var mutationRate = 0.2
+      var col = childDNA[9];
       var mutateFactor = round(random(-5,5));
       if (random(1) < mutationRate) {
         childDNA[1] += mutateFactor;
         childDNA[6] += mutateFactor;
+        childDNA[9] = col.substr(0,5) + String(Number(col[5]) + 2)[0] + col[6];
         childDNA[10] += mutateFactor;
       }
       console.log(mutateFactor)
