@@ -1,5 +1,5 @@
 //canvas set up
-var canvasSize = 500;
+var canvasSize = 800;
 
 // Population stats
 var maxspeed = 3;
@@ -101,7 +101,7 @@ function newWorld() {
 
 // Setup and initialize ecosystem
 function setup() {
-  worldCanvas = createCanvas(canvasSize, canvasSize);
+  worldCanvas = createCanvas(windowWidth, windowHeight);
 	var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   worldCanvas.position(x, y);
@@ -170,13 +170,20 @@ function draw() {
         grass.push(potentialChild);
     }
   }
-
+	// reload HTML page when population of prey/predator becomes 0
 	newWorld();
 
+	// text to canvas
+	fill(0);
+	textSize(18);
+	var wolfPop = wolves.length;
+	var rabbitPop = rabbits.length;
+	var grassPop = grass.length;
 	//display to HTML page
-	document.getElementById("wolfPop").innerHTML = wolves.length;
-	document.getElementById("rabbitPop").innerHTML = rabbits.length;
-	document.getElementById("grassPop").innerHTML = grass.length;
+	text("Wolf Population: " + wolfPop + "\nRabbit Population: " + rabbitPop + "\nGrass Population: " + grassPop, 20, 40)
 
+}
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
