@@ -30,8 +30,6 @@ function Creature(position, DNA) {
     this.render();
     this.hunger += 1;
     this.creatureSize -= 0.003 * this.appetite;   // fatigue
-
-
   },
 
   this.render = function() {
@@ -183,10 +181,10 @@ function Creature(position, DNA) {
 
   // prevent from leaving canvas
   this.borders = function(canvasWidth) {
-    if (this.position.x < this.visionRadius) this.velocity.x = 1;
-    if (this.position.y < this.visionRadius) this.velocity.y = 1;
-    if (this.position.x > windowWidth - this.visionRadius) this.velocity.x = -1;
-    if (this.position.y > windowHeight - this.visionRadius) this.velocity.y = -1;
+    if (this.position.x < 5) this.velocity.x = 1;
+    if (this.position.y < 5) this.velocity.y = 1;
+    if (this.position.x > windowWidth - 10) this.velocity.x = -1;
+    if (this.position.y > windowHeight - 10) this.velocity.y = -1; //bottom
     },
 
   this.eat = function(f) {
@@ -225,15 +223,23 @@ function Creature(position, DNA) {
         }
       }
 
+    function shadeColor2(color, percent) {
+      var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+      return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+    }
+
       // mutation
       var mutationRate = 0.2
       var col = childDNA[9];
-      var mutateFactor = round(random(-5,5));
+      var mutateFactor = round(random(-3,3));
       if (random(1) < mutationRate) {
-        childDNA[1] += mutateFactor;
-        childDNA[6] += mutateFactor;
-        childDNA[9] = col.substr(0,5) + String(Number(col[5]) + 2)[0] + col[6];
-        childDNA[10] += mutateFactor;
+        childDNA[1] += mutateFactor; // diameter
+        childDNA[4] += mutateFactor; // appetite
+        childDNA[5] += mutateFactor; // vision radius
+        childDNA[6] += mutateFactor; // maxspeed
+        childDNA[9] = shadeColor2(col, mutationRate); // color
+        //childDNA[9] = col.substr(0,5) + String(Number(col[5]) + 2)[0] + col[6];
+        childDNA[10] += mutateFactor; // health
       }
 
       // parent loses energy (goes to 80% starting size or half current size, whichever is bigger)
