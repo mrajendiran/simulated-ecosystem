@@ -64,9 +64,9 @@ function createWithClick(event) {
             newPick = 1;
         } else if (thisKey.key == 'g') {
             newPick = 2;
-        } 
+        }
     }
-    
+
     // make the creature
     function pickCritterToMake(creatures, method='duplicate') {
         // from scratch
@@ -87,14 +87,14 @@ function createWithClick(event) {
             console.log('choose "duplicate" or "new" for method');
             return null;
         }
-        // set position 
+        // set position
         newCritter.position = createVector(downX,downY);
 
         // add new critter to world
         creatures.push(newCritter);
-        
+
     }
-    
+
     // push the creature to the correct array
     if (newPick==0) {
         pickCritterToMake(wolves);
@@ -104,8 +104,8 @@ function createWithClick(event) {
         pickCritterToMake(grass);
     }
 
-    
-}  
+
+}
 document.addEventListener("mousedown", createWithClick);
 
 // setup and initialize ecosystem
