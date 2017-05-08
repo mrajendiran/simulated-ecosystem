@@ -15,7 +15,7 @@ var reproThresh = 0.0001;
 var vision = 5;
 var appetite = 10;
 
-// creature array
+// creature array (holds entire population)
 var rabbits = [];
 var wolves = [];
 var grass = [];
@@ -146,7 +146,8 @@ function draw() {
     rabbits[i].eat(grass);   // eat
     rabbits[i].flee(wolves, 100, 2.5);   // run away from wolves
     rabbits[i].flock(grass, 2.0);   // chase grass
-    // reproduce with random member of mating pool
+    /* reproduce with random member of mating pool
+		reproduction function includes crossover/mutation */
 		var partner = floor(random(0, rabbits.length-1))
     potentialChild = rabbits[i].reproduce(rabbits[partner]);
     if (potentialChild != null){
@@ -225,7 +226,7 @@ function draw() {
         wolves.push(new Creature(position1, worldDNA[0]));
       }
     }
-    
+
 }
 
 // change canvas size on window resize

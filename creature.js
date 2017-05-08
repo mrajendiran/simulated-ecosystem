@@ -1,5 +1,5 @@
 /*
-creature.js
+creature.js - Monica Rajendiran & Seth Green
 contains:
 - all functions associated with a creature (e.g. reproduce, eat)
 */
@@ -207,7 +207,7 @@ function Creature(position, DNA) {
 
     if (random(1) / (0.025 * this.creatureSize**2) < this.reproThresh ) { // bigger ones should reproduce easier
 
-      // crossover
+      // crossover happens by pulling another partner from the gene pool and sharing DNA
       var aPartnerDNA = this.dna;
       var bPartnerDNA = bPartner.dna;
       var childDNA = []
@@ -228,7 +228,7 @@ function Creature(position, DNA) {
       return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
     }
 
-      // mutation
+      // mutation threshold
       var mutationRate = 0.2
       //var col = childDNA[9];
       var mutateFactor = round(random(-3,3));
